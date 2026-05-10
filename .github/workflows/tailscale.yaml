@@ -13,12 +13,9 @@ jobs:
           curl -fsSL https://tailscale.com/install.sh | sh
 
       - name: Authenticate Tailscale
-        env:
-          TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
         run: |
           sudo tailscale up \
             --ssh \
-            --authkey=${TS_AUTHKEY} \
             --hostname=github-runner
 
       - name: Show Tailscale IP
