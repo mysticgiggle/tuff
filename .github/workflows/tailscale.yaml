@@ -1,0 +1,29 @@
+name: Tailscale SSH Runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  tailscale-ssh:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Install Tailscale
+        run: |
+          curl -fsSL https://tailscale.com/install.sh | sh
+
+      - name: Authenticate Tailscale
+        env:
+          TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
+        run: |
+          sudo tailscale up \
+            --ssh \
+            --authkey=${TS_AUTHKEY} \
+            --hostname=github-runner
+
+      - name: Show Tailscale IP
+        run: tailscale ip -4
+
+      - name: Keep runner alive
+        run: |
+          tail -f /dev/null
